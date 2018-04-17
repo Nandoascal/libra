@@ -8,10 +8,10 @@ app = Flask(__name__)
 
 
 # pulling config settings
-if os.path.exists(os.path.join(os.getcwd(), "config.py")):
-    app.config.from_pyfile(os.path.join(os.getcwd(), "config.py"))
-else:
+if os.path.exists(os.path.join(os.getcwd(), "config.env.py")):
     app.config.from_pyfile(os.path.join(os.getcwd(), "config.env.py"))
+else:
+    app.config.from_pyfile(os.path.join(os.getcwd(), "config.py"))
 
 # starting db
 db = SQLAlchemy(app)
@@ -100,7 +100,7 @@ def search():
     searchTarget = request.form['searchTarget']
     results = Skills.query.filter(Skills.skill.like("%" + searchTarget + "%")).all()
     if not results:
-        return 'NOPE'
+        return render_template('searchResults.html', results=None)
     else:
         return render_template('searchResults.html', results=results)
 
@@ -108,7 +108,7 @@ def search():
 @app.route('/logout')
 @auth.oidc_logout
 def logout():
-    return redirect('/')
+    return 'You\'ve been successfully logged out!'
 
 if __name__ == '__main__':
     app.run(host=app.config['IP'], port=app.config['PORT'])

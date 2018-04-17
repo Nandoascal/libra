@@ -1,9 +1,15 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-<ul>
-  {% for result in results %}
-    <li class="list-group-item"><a href="/skills/{{ result.user }}">{{result.user}}</a></li>
-  {% endfor %}
-</ul>
+<div class="container">
+  {% if results == None %}
+    <h1>No matches found<h1>
+  {% else %}
+    <ul>
+      {% for result in results %}
+        <li class="list-group-item"><a href="/skills/{{ result.user }}">{{result.user}}</a></li>
+      {% endfor %}
+    </ul>
+  {% endif %}
+</div>
 {% endblock %}

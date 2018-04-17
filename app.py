@@ -46,7 +46,7 @@ def addskills():
         skill = Skills.query.filter_by(user=uid, skill=newskill).first()
         skill.level = level
         db.session.commit()
-    elif Skills.query.filter_by(skill=newskill).first() is None:
+    elif Skills.query.filter_by(user=uid, skill=newskill).first() is None:
         yourLevel = Skills(user=uid, skill=newskill, level=level)
         db.session.add(yourLevel)
         db.session.commit()

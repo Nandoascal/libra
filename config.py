@@ -7,8 +7,8 @@ from os import environ
 DEBUG = True
 IP = environ.get('IP', '')
 PORT = environ.get('PORT', '')
-SECRET_KEY = ''
-SERVER_NAME = ''
+SECRET_KEY = environ.get('SECRET_KEY', '')
+SERVER_NAME = environ.get('SERVER_NAME, '')
 
 ###########################
 # DB info

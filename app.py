@@ -106,9 +106,9 @@ def search():
 
 
 @app.route('/logout')
-#@auth.oidc_logout
+@auth.oidc_logout
 def logout():
-    return render_template('logout.html')
+    return redirect('/')
 
 if __name__ == '__main__':
     app.run(host=app.config['IP'], port=app.config['PORT'])

@@ -5,10 +5,10 @@ from os import environ
 ###########################
 
 DEBUG = True
-IP = environ.get('IP', '')
-PORT = environ.get('PORT', '')
+IP = environ.get('IP', ''0.0.0.0)
+PORT = environ.get('PORT', 5000)
 SECRET_KEY = environ.get('SECRET_KEY', '')
-SERVER_NAME = environ.get('SERVER_NAME, '')
+SERVER_NAME = environ.get('SERVER_NAME', 'libra.csh.rit.edu')
 
 ###########################
 # DB info
@@ -20,9 +20,9 @@ SQLALCHEMY_DATABASE_URI = environ.get('SQLALCHEMY_DATABASE_URI', '')
 # OIDC config
 ###########################
 
-OIDC_ISSUER = os.environ.get('OIDC_ISSUER', '')
+OIDC_ISSUER = os.environ.get('OIDC_ISSUER', 'https://sso.csh.rit.edu/auth/realms/csh')
 OIDC_CLIENT_CONFIG = {
-    'client_id': environ.get('OIDC_CLIENT_ID', ''),
+    'client_id': environ.get('OIDC_CLIENT_ID', 'libra'),
     'client_secret': environ.get('OIDC_CLIENT_SECRET', ''),
     'post_logout_redirect_uris': [environ.get('LIBRA_OIDC_LOGOUT_REDIRECT_URI', 'https://libra.csh.rit.edu/logout')]
 }

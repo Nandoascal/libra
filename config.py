@@ -6,7 +6,7 @@ from os import environ
 
 DEBUG = True
 IP = environ.get('IP', '0.0.0.0')
-PORT = environ.get('PORT', '5000')
+PORT = environ.get('PORT', 5000)
 SECRET_KEY = environ.get('SECRET_KEY', '')
 SERVER_NAME = environ.get('SERVER_NAME', 'libra.csh.rit.edu')
 

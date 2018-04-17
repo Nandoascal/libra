@@ -1,0 +1,39 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+<div class="container">
+  <h1>{{user}} wants to edit {{skill.skill}}</h1>
+  <form name="addForm" id="addForm" method="POST" action="/edit/{{user}}/{{id}}/" novalidate>
+    <fieldset class="form-group">
+      <legend>Ability Level</legend>
+      <div class="form-check">
+        <label class="form-check-label">
+          <input class="form-check-input" name="level" id="optionsRadios1" value="Beginner" type="radio">
+          Beginner
+        </label>
+      </div>
+      <div class="form-check">
+      <label class="form-check-label">
+          <input class="form-check-input" name="level" id="optionsRadios2" value="Intermediate" type="radio">
+          Intermediate
+        </label>
+      </div>
+      <div class="form-check">
+      <label class="form-check-label">
+          <input class="form-check-input" name="level" id="optionsRadios3" value="Expert" type="radio">
+          Expert
+        </label>
+      </div>
+      <div class="form-check">
+      <label class="form-check-label">
+          <input class="form-check-input" name="level" id="optionsRadios4" value="Creator" type="radio">
+          Creator
+        </label>
+      </div>
+    </fieldset>
+    <button type="submit" class="btn btn-primary">Submit</button>
+    </fieldset>
+  </form>
+</div>
+{% endblock %}

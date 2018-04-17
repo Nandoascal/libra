@@ -1,0 +1,10 @@
+{% extends 'layout.html' %}
+
+
+{% block body %}
+  <ul>
+  {% for user in data %}
+    <li class="list-group-item"><a href="/skills/{{user[0]}}">{{user[0]}}</a></li>
+  {% endfor %}
+  </ul>
+{% endblock %}

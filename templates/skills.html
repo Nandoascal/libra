@@ -1,8 +1,17 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  <h1>Show skills here</h1>
-  <table>
+<div class="container">
+  <h1>{{ user }}'s Skills</h1>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Skill</th>
+        <th>Level</th>
+        <th>Buttons</th>
+      <tr>
+    </thead>
+    <tbody>
     {% for skill in data %}
       <tr>
         <td>
@@ -11,18 +20,21 @@
         <td>
           {{ skill.level }}
         </td>
+        <td>
+          <a href="/edit/{{ user }}/{{ skill.id }}" style="color:inherit"><button type="submit" class="btn btn-warning btn-sm">EDIT</button></a>
+          <a href="/delete/{{ user }}/{{ skill.id }}" style="color:inherit"><button type="submit" class="btn btn-danger btn-sm">DELETE</button></a>
       </tr>
     {% endfor %}
+    </tbody>
   </table>
 
-
-  <form name="addForm" id="addForm" method="POST" action="{{ url_for('addskills') }}" novalidate>
+  <form name="addForm" id="addForm" method="POST" action="{{ url_for('addskills') }}" validate>
     <fieldset>
       <legend>Add a skill</legend>
       <div class="form-group row">
         <label for="newSkill" class="col-sm-2 col-form-label">Skill</label>
         <div class="col-sm-10">
-  				<input class="form-control" name="newSkill" id="newSkill" aria-describedby="skill" placeholder="Enter a new skill" type="skill">
+  				<input type="text" class="form-control" name="newSkill" id="newSkill" aria-describedby="skill" placeholder="Enter a new skill" type="skill" required>
   				      <small id="meme" class="form-text text-muted">Remember, PHP isn't a real skill.</small>
         </div>
       </div>
@@ -30,7 +42,7 @@
         <legend>Ability Level</legend>
         <div class="form-check">
           <label class="form-check-label">
-            <input class="form-check-input" name="level" id="optionsRadios1" value="Beginner" type="radio">
+            <input class="form-check-input" name="level" id="optionsRadios1" value="Beginner" type="radio" required>
             Beginner
           </label>
         </div>
@@ -56,5 +68,5 @@
       <button type="submit" class="btn btn-primary">Submit</button>
     </fieldset>
   </form>
-
+</div>
 {% endblock %}

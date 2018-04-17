@@ -1,9 +1,8 @@
 import os
 
-from flask import Flask, render_template, request, session, redirect
+from flask import Flask, render_template, request, session, redirect, flash, url_for
 from flask_pyoidc.flask_pyoidc import OIDCAuthentication
 from flask_sqlalchemy import SQLAlchemy
-from wtforms import Form, StringField, TextAreaField, validators
 
 app = Flask(__name__)
 
@@ -19,34 +18,21 @@ auth = OIDCAuthentication(app, issuer=app.config["OIDC_ISSUER"],
                           client_registration_info=app.config["OIDC_CLIENT_CONFIG"])
 
 class Skills(db.Model):
+     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
      user = db.Column(db.String(50), primary_key=True)
      skill = db.Column(db.String(50), primary_key=True)
      level = db.Column(db.String(50))
 
 
 @app.route('/')
-@auth.oidc_auth
-def index():
-    return render_template('home.html')
-
-@app.route('/logout')
-#@auth.oidc_logout
-def logout():
-    return render_template('logout.html')
-
-@app.route('/about')
-@auth.oidc_auth
-def about():
-    return render_template('about.html')
-
 @app.route('/skills')
 @auth.oidc_auth
 def skills():
     uid = str(session["userinfo"].get("preferred_username", ""))
     data = Skills.query.filter_by(user=uid).all()
-    return render_template('skills.html', data=data)
+    return render_template('skills.html', data=data, user=uid)
 
-@app.route('/addskills', methods=['POST'])
+@app.route('/skills/', methods=['POST'])
 @auth.oidc_auth
 def addskills():
     uid = str(session["userinfo"].get("preferred_username", ""))
@@ -64,8 +50,62 @@ def addskills():
 
     data = Skills.query.filter_by(user=uid).all()
 
-    return redirect('/skills')
+    return redirect('/')
 
+@app.route('/skills/<user>')
+@auth.oidc_auth
+def userSkill(user):
+    uid = str(session["userinfo"].get("preferred_username", ""))
+    if user == uid:
+        return redirect('/skills')
+    else:
+        data = Skills.query.filter_by(user=user).all()
+        return render_template('otherUserSkills.html', data=data, user=user)
+
+@app.route('/edit/<user>/<id>')
+@auth.oidc_auth
+def edit(user, id):
+    skill = Skills.query.filter_by(id=id, user=user).first()
+    return render_template('edit.html', user=user, id=id, skill=skill)
+
+@app.route('/edit/<user>/<id>/', methods=['POST'])
+@auth.oidc_auth
+def editSkill(user, id):
+    newLevel = request.form['level']
+    oldSkill = Skills.query.filter_by(user=user, id=id).first()
+    oldSkill.level = newLevel
+    db.session.commit()
+    return redirect('/')
+
+@app.route('/delete/<user>/<id>')
+@auth.oidc_auth
+def delete(user, id):
+    rip = Skills.query.filter_by(id=id, user=user).first()
+    db.session.delete(rip)
+    db.session.commit()
+    return redirect('/')
+
+@app.route('/users')
+@auth.oidc_auth
+def users():
+    data = db.session.query(Skills.user).distinct()
+    return render_template('users.html', data=data, location=request.path)
+
+@app.route('/search', methods=['POST'])
+@auth.oidc_auth
+def search():
+    searchTarget = request.form['searchTarget']
+    results = Skills.query.filter(Skills.skill.like("%" + searchTarget + "%")).all()
+    if not results:
+        return 'NOPE'
+    else:
+        return render_template('searchResults.html', results=results)
+
+
+@app.route('/logout')
+#@auth.oidc_logout
+def logout():
+    return render_template('logout.html')
 
 if __name__ == '__main__':
     app.run(debug=True)

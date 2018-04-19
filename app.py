@@ -105,10 +105,5 @@ def search():
         return render_template('searchResults.html', results=results)
 
 
-@app.route('/logout')
-@auth.oidc_logout
-def logout():
-    return 'You\'ve been successfully logged out!'
-
 if __name__ == '__main__':
     app.run(host=app.config['IP'], port=app.config['PORT'])
